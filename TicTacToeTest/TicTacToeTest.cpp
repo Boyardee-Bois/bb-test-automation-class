@@ -50,7 +50,7 @@ namespace TicTacToeTest
 			//   both prior to & after the test scenario
 		}
 
-		TEST_METHOD(TestDraw)
+		TEST_METHOD(TestDrawJK)
 		{
 			//bool isDraw() - true if no - one has won, false otherwise(e.g.consider - no spaces empty)
 			
@@ -62,7 +62,72 @@ namespace TicTacToeTest
 			/*
 			Testing draw on a win
 			*/
-			Assert::IsTrue(board.isDraw());
+			// LV - isDraw() returns True, only if there is a draw
+			//   Draw should be defined as no empty spaces & no-one has won
+			//   Simple fix here is to assert IsFalse(), but that doesn't quite capture a good test case
+			Assert::IsFalse(board.isDraw());
+		}
+
+		TEST_METHOD(TestDrawLV1) {
+			Logger::WriteMessage("Draw scenario - v1, all spaces marked, no one wins");
+			// verify no one has won & there isn't a draw
+			// Precondition checks - no draw, no one-has won
+			Assert::IsFalse(board.isDraw());
+			Assert::IsFalse(board.isWinner(TicTacToeBoard::O));
+			Assert::IsFalse(board.isWinner(TicTacToeBoard::X));
+			// Create a draw condition   X O X
+			//                           O X O
+			//                           O X O
+			board.writeSquare(0, 0, TicTacToeBoard::X);
+			board.writeSquare(0, 1, TicTacToeBoard::O);
+			board.writeSquare(0, 2, TicTacToeBoard::X);
+			board.writeSquare(1, 0, TicTacToeBoard::O);
+			board.writeSquare(1, 1, TicTacToeBoard::X);
+			board.writeSquare(1, 2, TicTacToeBoard::O);
+			board.writeSquare(2, 0, TicTacToeBoard::O);
+			board.writeSquare(2, 1, TicTacToeBoard::X);
+			// Prior to final move - rerun precondition checks
+			Assert::IsFalse(board.isDraw());
+			Assert::IsFalse(board.isWinner(TicTacToeBoard::O));
+			Assert::IsFalse(board.isWinner(TicTacToeBoard::X));
+			// Create the draw
+			board.writeSquare(2, 2, TicTacToeBoard::O);
+			// Verify no winner, and there exists a draw
+			Assert::IsTrue(board.isDraw(), L"Post final move: expect a Draw, but isDraw() returned false");
+			Assert::IsFalse(board.isWinner(TicTacToeBoard::O), L"Post final move, expect no one has won, but O did win");
+			Assert::IsFalse(board.isWinner(TicTacToeBoard::X), L"Post final move, expect no one has won, but X did win");
+		}
+
+		// Scenario where a player wins with all spaces marked, isDraw() should return false
+		TEST_METHOD(TestDrawLV2) {
+			Logger::WriteMessage("Draw scenario - v2, all spaces marked, but X also wins");
+			// verify no one has won & there isn't a draw
+			// Precondition checks - no draw, no one-has won
+			Assert::IsFalse(board.isDraw());
+			Assert::IsFalse(board.isWinner(TicTacToeBoard::O));
+			Assert::IsFalse(board.isWinner(TicTacToeBoard::X));
+			// Create a win condition    X O X
+			//  with all spaces marked   O X O
+			//                           O X X
+			board.writeSquare(0, 0, TicTacToeBoard::X);
+			board.writeSquare(0, 1, TicTacToeBoard::O);
+			board.writeSquare(0, 2, TicTacToeBoard::X);
+			board.writeSquare(1, 0, TicTacToeBoard::O);
+			board.writeSquare(1, 1, TicTacToeBoard::X);
+			board.writeSquare(1, 2, TicTacToeBoard::O);
+			board.writeSquare(2, 0, TicTacToeBoard::O);
+			board.writeSquare(2, 1, TicTacToeBoard::X);
+			// Prior to final move - rerun precondition checks
+			Assert::IsFalse(board.isDraw());
+			Assert::IsFalse(board.isWinner(TicTacToeBoard::O));
+			Assert::IsFalse(board.isWinner(TicTacToeBoard::X));
+			// Create the draw
+			board.writeSquare(2, 2, TicTacToeBoard::X);
+			// Edge case, X won on final move - draw should return False!
+			Logger::WriteMessage("  Post final move, expect X to win & no draw, even though all spaces marked");
+			Assert::IsFalse(board.isWinner(TicTacToeBoard::O), L"Post final move, expect no one has won, but O did win");
+			Assert::IsTrue(board.isWinner(TicTacToeBoard::X), L"Post final move, expected X to win, but didn't");
+			Assert::IsFalse(board.isDraw(), L"Post final move: expect no Draw since X won, even though all spaces marked");
 		}
 
 		TEST_METHOD(GameStartPlayerX)
