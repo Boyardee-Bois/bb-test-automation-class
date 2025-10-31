@@ -10,10 +10,33 @@ namespace TicTacToeTest
 	TEST_CLASS(TicTacToeTest)
 	{
 	public:
+
 		TicTacToeBoard board;
-		TEST_CLASS_INITIALIZE(Board) {
-			// nothing to initialize at the momement
+
+		TEST_CLASS_INITIALIZE(Board) 
+		{	
 		}
+
+		TEST_METHOD(TestSomething)
+		{
+
+		}
+
+		TEST_METHOD(TestDraw)
+		{
+			//bool isDraw() - true if no - one has won, false otherwise(e.g.consider - no spaces empty)
+			
+			Logger::WriteMessage("Testing Draw");
+			board.writeSquare(0,0, TicTacToeBoard::X);
+			board.writeSquare(0, 1, TicTacToeBoard::X);
+			board.writeSquare(0, 2, TicTacToeBoard::X);
+
+			/*
+			Testing draw on a win
+			*/
+			Assert::IsTrue(board.isDraw());
+		}
+
 		TEST_METHOD(GameStartPlayerX)
 		{
 			Logger::WriteMessage("Testing X is selected as first player\n");
@@ -21,26 +44,30 @@ namespace TicTacToeTest
 			Assert::AreNotEqual(board.getPlayerName(), 'O');
 		}
 
-		TEST_METHOD(TestMoves) {
-			// :writeSquare(int row, int col, char currentPlayer)
-			// :getSquareContents(int row, int col)
-			// :isSquareEmpty(int row, int col) 
-			Logger::WriteMessage("Testing we can write X & O into different cells\n");
+		TEST_METHOD(TestMoves) 
+		{
+			//Assert::writeSquare(int row, int col, char currentPlayer)
+			//Assert::getSquareContents(int row, int col)
+			//Assert::isSquareEmpty(int row, int col) 
+			//Logger::WriteMessage("Testing we can write X & O into different cells\n");
 			// write a cell & verify the cell is written correctly
 			Assert::IsTrue(board.isSquareEmpty(0, 0));
 			board.writeSquare(0, 0, TicTacToeBoard::X);
 			Assert::AreEqual(board.getSquareContents(0, 0), 'X');
 			Assert::IsFalse(board.isSquareEmpty(0, 0));
 		}
-		TEST_METHOD(TestException) {
+
+		TEST_METHOD(TestException) 
+		{
 			Logger::WriteMessage("Testing Exception handling in getSquareContents - throw invalid argument");
 			board.getSquareContents(3, 1);  // should throw an exception as 3 is invalid
 		}
+
 		TEST_METHOD(InvalidMove) {
-			// :writeSquare(int row, int col, char currentPlayer)
+			//Assert::writeSquare(int row, int col, char currentPlayer)
 			// :getSquareContents(int row, int col)
 			// :isSquareEmpty(int row, int col) 
-			Logger::WriteMessage("Testing an invalid move 2,3\n");
+			//Logger::WriteMessage("Testing an invalid move 2,3\n");
 			Assert::IsTrue(board.isSquareEmpty(2, 3), L"Cell 2,3 is not empty");
 			board.writeSquare(2, 3, TicTacToeBoard::X);
 			Assert::AreEqual(board.getSquareContents(2, 3), 'X');
