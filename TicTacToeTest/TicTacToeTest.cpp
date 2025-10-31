@@ -12,14 +12,19 @@ namespace TicTacToeTest
 	public:
 
 		TicTacToeBoard board;
+		//Player player;
 
 		TEST_CLASS_INITIALIZE(Board) 
 		{	
 		}
 
-		TEST_METHOD(TestSomething)
+		TEST_METHOD(TestWinner)
 		{
+			board.writeSquare(0, 0, TicTacToeBoard::O);
+			board.writeSquare(0, 1, TicTacToeBoard::O);
+			board.writeSquare(0, 2, TicTacToeBoard::O);
 
+			Assert::IsTrue(board.isWinner(board.getPlayer()));
 		}
 
 		TEST_METHOD(TestDraw)
@@ -63,7 +68,8 @@ namespace TicTacToeTest
 			board.getSquareContents(3, 1);  // should throw an exception as 3 is invalid
 		}
 
-		TEST_METHOD(InvalidMove) {
+		TEST_METHOD(InvalidMove) 
+		{
 			//Assert::writeSquare(int row, int col, char currentPlayer)
 			// :getSquareContents(int row, int col)
 			// :isSquareEmpty(int row, int col) 
