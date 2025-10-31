@@ -14,8 +14,17 @@ namespace TicTacToeTest
 		TicTacToeBoard board;
 		//Player player;
 
-		TEST_CLASS_INITIALIZE(Board) 
-		{	
+		TEST_CLASS_INITIALIZE(BoardClassTest)
+		{
+			// this method is run once for the TicTacToeTest class
+			//    intentionally blank - nothing to initialize at this time
+			Logger::WriteMessage("Test class initialized");
+		}
+
+		TEST_METHOD_INITIALIZE(TestSetup) {
+			// this method is run prior to EVERY test case inside the class (ie this file)
+			Logger::WriteMessage("Initializing Board object.");
+			board = TicTacToeBoard();          // reinitialize board
 		}
 
 		TEST_METHOD(TestWinner)
