@@ -27,13 +27,27 @@ namespace TicTacToeTest
 			board = TicTacToeBoard();          // reinitialize board
 		}
 
+		// TestWinner test case
+		//   Write top row, with all Os (valid behavior)
+		//   Since, board class does not enforce turn alternation (out of scope, done outside the class)
+		//     simply issue three consecutive writes by O and verify Player O won
 		TEST_METHOD(TestWinner)
 		{
+			// first verify neither X nor O is a winner
+			Assert::IsFalse(board.isWinner(TicTacToeBoard::O));
+			Assert::IsFalse(board.isWinner(TicTacToeBoard::X));
+
+			// mark top row with O
 			board.writeSquare(0, 0, TicTacToeBoard::O);
 			board.writeSquare(0, 1, TicTacToeBoard::O);
 			board.writeSquare(0, 2, TicTacToeBoard::O);
 
-			Assert::IsTrue(board.isWinner(board.getPlayer()));
+			// now verify X still hasn't won, but O has
+			Assert::IsTrue(board.isWinner(TicTacToeBoard::O));
+			Assert::IsFalse(board.isWinner(TicTacToeBoard::X));
+
+			// Note - the player whose turn it is to play is undetermined
+			//   both prior to & after the test scenario
 		}
 
 		TEST_METHOD(TestDraw)
